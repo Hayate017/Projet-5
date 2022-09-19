@@ -6,9 +6,6 @@ let idItem = url.searchParams.get("id");
 console.log(idItem);
 let item = "";
 
-const colorPicked = document.querySelector("#colors");
-const quantityPicked = document.querySelector("#quantity");
-
 // Fonction pour récupérer les données de l'API grace à l'ID
 function getItem() {
   // Récupération des articles de l'API
@@ -18,7 +15,7 @@ function getItem() {
       return response.json();
     })
 
-    // J'exporte les données et affiche les caractéristiques du produit grace à la fonction "showItem"
+    // Utilisation de la fonction "showItem" pour afficher les caractéristiques de produit et exportation des données
 
     .then(function (data) {
       showItem(data);
@@ -32,22 +29,22 @@ function getItem() {
 // Permet d'afficher les caractéristiques du produit
 
 function showItem(article) {
-  // Affichage de l'image
+  // Permet d'afficher l'image du produit
   let imgItem = document.createElement("img");
   document.querySelector(".item__img").appendChild(imgItem);
   imgItem.src = article.imageUrl;
   imgItem.alt = article.altTxt;
 
-  // Affichage du nom du produit
+  // Permet d'afficher le nom du produit
   document.querySelector("#title").innerHTML = article.name;
 
-  // Affichage du prix
+  // Permet d'afficher le prix du produit
   document.querySelector("#price").innerHTML = article.price;
 
-  // Affichage de la description
+  // Permet d'afficher la description du produit
   document.querySelector("#description").innerHTML = article.description;
 
-  // Affichage des couleurs disponibles
+  // Permet d'afficher les couleurs disponibles du produit
   for (let color of article.colors) {
     let colorOfItem = document.createElement("option");
     document.querySelector("#colors").appendChild(colorOfItem),
@@ -58,7 +55,7 @@ function showItem(article) {
 
 getItem();
 
-// Fonction pour envoyer les infos du canapé au clic sur le bouton
+// Fonction pour lier les infos du canapé au clic du bouton
 
 function getProductForCart(product) {
   const addBtn = document.querySelector("#addToCart");
@@ -77,10 +74,10 @@ function getProductForCart(product) {
     };
 
     // Permet de contrôler qu'une quantité et une couleur sont bien sélectionnées
-    if (productQuantity.value !== 0 && colorChoice.value !== "") {
+    if (productQuantity.value > 0 && colorChoice.value !== "") {
       let cartSaved = JSON.parse(localStorage.getItem("myCart"));
       if (cartSaved) {
-        // Permet de controler l'existence du produit dans le panier (même ID et même couleur)
+        // Permet de vérifier la présence du produit dans le panier
         const productControl = cartSaved.find(
           (sofa) => sofa.ID == product._id && sofa.Color == colorChoice.value
         );
@@ -99,56 +96,22 @@ function getProductForCart(product) {
       }
       alert("Le produit a été ajouté au panier");
     }
+
+    if (productQuantity.value <= 0 && colorChoice.value == "") {
+      alert("Veuillez sélectionner une couleur et une quantité");
+    } else {
+      if (productQuantity.value <= 0 && colorChoice.value !== "") {
+        alert("Veuillez sélectionner une quantité");
+      } else {
+        if (productQuantity.value > 0 && colorChoice.value == "") {
+          alert("Veuillez sélectionner une couleur");
+        }
+      }
+    }
   });
 }
 
-// /**
-//  * Validate user input to add to cart.
-//  *
-//  * @param {HTMLElement} el Template element
-//  * @param {Product} data
-//  */
-// function validateCartInput(el, data) {
-//   const errors = [];
-
-//   /** @type {HTMLSelectElement} */
-//   const colorsSelect = el.querySelector("#colors");
-//   /** @type {HTMLInputElement} */
-//   const quantityInput = el.querySelector("#quantity");
-//   const minQuantity = quantityInput.min || 1;
-//   const maxQuantity = quantityInput.max || 1;
-
-//   const color = colorsSelect.value || null;
-//   const quantity = quantityInput.valueAsNumber || 0;
-
-//   // validate color
-//   if (!color) {
-//     errors.push(new ValidationEntryError("Veuillez choisir une couleur"));
-//   } else if (!data.colors.includes(color)) {
-//     errors.push(new ValidationEntryError("Couleur inconnue"));
-//   }
-
-//   // validate quantity
-//   if (!Number.isInteger(quantity)) {
-//     errors.push(new ValidationEntryError("Quantité invalide"));
-//   } else if (quantity < minQuantity || quantity > maxQuantity) {
-//     errors.push(
-//       new ValidationEntryError(
-//         `Veuillez choisir une quantité comprise entre ${minQuantity} et ${maxQuantity}`
-//       )
-//     );
-//   }
-
-//   if (errors.length === 0) {
-//     return { color, quantity };
-//   }
-
-//   const err = new ValidationError(errors);
-
-//   throw err;
-// }
-
-// Sauvegarde le panier dans le localStorage et sérialise la variable
+// Sauvegarde le panier dans le localStorage et octroie un numéro à la variable
 function saveCart(cart) {
   localStorage.setItem("myCart", JSON.stringify(cart));
 }

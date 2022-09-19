@@ -1,3 +1,4 @@
+// Création des constantes pour le formulaire du panier
 const myCart = JSON.parse(localStorage.getItem("myCart"));
 const submitBtn = document.querySelector("#order");
 const firstName = document.querySelector("#firstName");
@@ -45,17 +46,17 @@ function showCart(product) {
 
 getCart();
 
-// Gestion Bouton "Supprimer"
+// Création bouton "Supprimer"
 
 const deleteBtn = document.querySelectorAll(".deleteItem");
 
-// Pour itérer sur tous les boutons supprimés. A la selection dans le DOM, le résultat est rendu sous forme d'un array
+// Gestion du bouton "Supprimer"
 for (let b = 0; b < deleteBtn.length; b++) {
   deleteBtn[b].addEventListener("click", function (event) {
     let removeProductId = myCart[b].ID;
     let removeProductColor = myCart[b].Color;
 
-    // Ici filter() sert a garder uniquement les produits qui n'ont pas été sélectionnés
+    // Conservation via filter() des éléments qui n'ont pas été sélectionnés
     const myNewCart = myCart.filter(
       (element) =>
         element.ID !== removeProductId || element.Color !== removeProductColor
@@ -69,7 +70,7 @@ for (let b = 0; b < deleteBtn.length; b++) {
   });
 }
 
-// Affiche le nombre total de produit dans le panier (en tenant compte de la quantité de chacun)
+// Affichage du nombre d'éléments dans le panier et leur quantité individuelle
 function showTotalQuantity() {
   let totalQuantity = 0;
   const showQuantity = document.querySelector("#totalQuantity");
@@ -83,7 +84,7 @@ function showTotalQuantity() {
 
 showTotalQuantity();
 
-// Affiche le prix total
+// Affichage du prix total
 function showTotalPrice() {
   let totalPrice = 0;
   const showPrice = document.querySelector("#totalPrice");
@@ -97,7 +98,7 @@ function showTotalPrice() {
 
 showTotalPrice();
 
-// Modifier la quantité directement dans le panier
+// Permet de modifier la quantité directement dans le panier de l'utilisateur
 
 function changeQuantity() {
   const quantitySelecter = document.querySelectorAll(".itemQuantity");
@@ -125,12 +126,12 @@ function changeQuantity() {
 
 changeQuantity();
 
-//  Controle des informations user
+//  Vérification des informations de l'utilisateur
 
 const userForm = document.querySelectorAll("form input");
 
 function datasUserControl() {
-  // Controle du prenom
+  // Vérification du prenom
   const firstNameValidation = document.querySelector("#firstNameErrorMsg");
   firstName.addEventListener("change", function (e) {
     if (/^[A-Z][A-Za-z\é\è\ê\-]+$/.test(e.target.value)) {
@@ -141,7 +142,7 @@ function datasUserControl() {
     }
   });
 
-  // Controle du nom
+  // Vérification du nom
   const lastNameValidation = document.querySelector("#lastNameErrorMsg");
   lastName.addEventListener("change", function (e) {
     if (/^[A-Z][A-Za-z\é\è\ê\-]+$/.test(e.target.value)) {
@@ -151,7 +152,7 @@ function datasUserControl() {
     }
   });
 
-  // Controle de l'adresse postale (du type "1 rue de maréchal leclerc")
+  // Vérification de l'adresse postale
   const addressValidation = document.querySelector("#addressErrorMsg");
   address.addEventListener("change", function (e) {
     if (/^.{3,144}$/.test(e.target.value)) {
@@ -161,7 +162,7 @@ function datasUserControl() {
     }
   });
 
-  // Controle de la ville
+  // Vérification de la ville
   const cityValidation = document.querySelector("#cityErrorMsg");
   city.addEventListener("change", function (e) {
     if (/^[A-Z][A-Za-z\é\è\ê\-]+$/.test(e.target.value)) {
@@ -172,7 +173,7 @@ function datasUserControl() {
     }
   });
 
-  // Controle de l'adresse mail
+  // Vérification de l'adresse email
   const emailValidation = document.querySelector("#emailErrorMsg");
   email.addEventListener("change", function (e) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(e.target.value)) {
@@ -185,7 +186,7 @@ function datasUserControl() {
 
 datasUserControl();
 
-// Envoyer les données user et récupère l'ID de la commmande
+// Envoie des données de l'utilisateur et récupération du numéro de commande
 
 submitBtn.addEventListener("click", function (e) {
   e.preventDefault();
@@ -225,7 +226,7 @@ submitBtn.addEventListener("click", function (e) {
         return response.json();
       })
       .then((data) => {
-        // Passe le "orderId" en paramètre de l'url
+        // Transforme le "orderId" en paramètre de l'url
         window.location.href = `confirmation.html?orderId=${data.orderId}`;
         localStorage.clear();
       })

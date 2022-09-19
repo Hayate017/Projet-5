@@ -1,7 +1,7 @@
-// Récupère l'ID contenu dans l'URL
+// Récupération de l'Id dans l'URL
 var idUrl = window.location.href;
 var url = new URL(idUrl);
 let showOrderId = url.searchParams.get("orderId");
 
-// Affiche l'ID dans le html
+// Affichage de l'Id dans le HTML
 document.querySelector("#orderId").innerHTML = showOrderId;
